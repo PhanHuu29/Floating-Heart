@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Floating Heart</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #270F34;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .spotify-player {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      box-shadow: 0 0 20px #ff69b4aa;
+      border-radius: 12px;
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+    }
+
+    .spotify-player iframe {
+      opacity: 0.5;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+    }
+
+    .spotify-player iframe:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hiệu ứng trái tim với css-doodle -->
+  <style>
+    css-doodle {
+      --color: @p(#51eaea, #fffde1, #ff9d76, #FB3569);
+      --rule: (
+        :doodle {
+          @grid: 30x1 / 18vmin;
+          --deg: @p(-180deg, 180deg);
+        }
+        :container {
+          perspective: 30vmin;
+        }
+        :after, :before {
+          content: '';
+          background: var(--color);
+          @place-cell: @r(100%) @r(100%);
+          @size: @r(6px);
+          @shape: heart;
+        }
+        @place-cell: center;
+        @size: 100%;
+        box-shadow: @m2(0 0 50px var(--color));
+        background: @m100(
+          radial-gradient(var(--color) 50%, transparent 0)
+          @r(-20%, 120%) @r(-20%, 100%) / 1px 1px
+          no-repeat
+        );
+        will-change: transform, opacity;
+        animation: scale-up 12s linear infinite;
+        animation-delay: calc(-12s / @I * @i);
+        @keyframes scale-up {
+          0%, 95.01%, 100% {
+            transform: translateZ(0) rotate(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          95% {
+            transform: translateZ(35vmin) rotateZ(@var(--deg));
+          }
+        }
+      );
+    }
+  </style>
+
+  <css-doodle use="var(--rule)"></css-doodle>
+
+  <!-- Nhúng Spotify widget -->
+  <div class="spotify-player">
+    <iframe style="border:none;"
+      src="https://open.spotify.com/embed/track/55Eo6NDkVhSRBonrT16kXM?utm_source=generator"
+      width="300" height="80" frameborder="0" allowtransparency="true"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- Script tự động phát khi người dùng nhấn vào đâu đó -->
+  <script>
+    document.body.addEventListener('click', function playSpotify() {
+      const iframe = document.querySelector('.spotify-player iframe');
+      iframe.src = iframe.src; // Gán lại src để phát
+      document.body.removeEventListener('click', playSpotify);
+    });
+  </script>
+
+  <script src="https://unpkg.com/css-doodle@0.15.3/css-doodle.min.js"></script>
+</body>
+</html>
